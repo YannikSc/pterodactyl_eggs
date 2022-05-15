@@ -1,0 +1,95 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v1",
+        "update_url": null
+    },
+    "exported_at": "2022-05-15T21:17:49+00:00",
+    "name": "Core Keeper",
+    "author": "pterodactyl@yannik-sc.de",
+    "description": "Explore an endless cavern of creatures, relics and resources in a mining sandbox adventure for 1-8 players. Mine, build, fight, craft and farm to unravel the mystery of the ancient Core.",
+    "features": null,
+    "images": [
+        "quay.io\/pterodactyl\/core:source"
+    ],
+    "file_denylist": [],
+    "startup": ".\/CoreKeeperServer -nographics -batchmode -world {{SERVER_WORLD}} -worldname \"{{SERVER_WORLDNAME}}\" -worldseed {{SERVER_WORLDSEED}} -gameid \"{{SERVER_GAMEID}}\" -datapath \"{{SERVER_DATAPATH}}\" -maxplayers {{SERVER_MAXPLAYERS}}",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Started session with Game ID \"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\r\n\r\nset -e\r\n\r\n# Core Keeper Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\napt -y update\r\napt -y --install-recommends install curl ca-certificates lib32gcc-s1\r\n\r\ncd \/tmp\r\ncurl -sSL -o steamcmd.tar.gz http:\/\/media.steampowered.com\/installer\/steamcmd_linux.tar.gz\r\n\r\nmkdir -p \/mnt\/server\/steamcmd\r\n\r\ntar -xzvf steamcmd.tar.gz -C \/mnt\/server\/steamcmd\r\n\r\ncd \/mnt\/server\/steamcmd\r\n\r\n# SteamCMD fails otherwise for some reason, even running as root.\r\n# This is changed at the end of the install process anyways.\r\nchown -R root:root \/mnt\r\nchmod +x .\/steamcmd.sh\r\n\r\nexport HOME=\/mnt\/server\r\n.\/steamcmd.sh +force_install_dir \/mnt\/server +login anonymous +app_update 1007 +app_update 1963720 +quit",
+            "container": "ubuntu:22.10",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "World",
+            "description": "Which world index to use.",
+            "env_variable": "SERVER_WORLD",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|integer"
+        },
+        {
+            "name": "World Name",
+            "description": "The name to use for the server.",
+            "env_variable": "SERVER_WORLDNAME",
+            "default_value": "Core Keeper Server",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string"
+        },
+        {
+            "name": "World Seed",
+            "description": "The seed to use for a new world. Set to 0 to generate random seed.",
+            "env_variable": "SERVER_WORLDSEED",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|integer"
+        },
+        {
+            "name": "Game id",
+            "description": "Game ID to use for the server. Need to be at least 23 characters and alphanumeric, excluding Y,y,x,0,O. Empty or not valid means a new ID will be generated at start.",
+            "env_variable": "SERVER_GAMEID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string"
+        },
+        {
+            "name": "Data path",
+            "description": "Save file location. If not set it defaults to a subfolder named \"DedicatedServer\" at the default Core Keeper save location.",
+            "env_variable": "SERVER_DATAPATH",
+            "default_value": "DedicatedServer",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string"
+        },
+        {
+            "name": "Max players",
+            "description": "Maximum number of players that will be allowed to connect to server.",
+            "env_variable": "SERVER_MAXPLAYERS",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|integer"
+        },
+        {
+            "name": "Library path",
+            "description": "LD_LIBRARY_PATH is required to run the server",
+            "env_variable": "LD_LIBRARY_PATH",
+            "default_value": ":./linux64/",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string"
+        }
+    ]
+}
