@@ -10,7 +10,7 @@
     "description": "Explore an endless cavern of creatures, relics and resources in a mining sandbox adventure for 1-8 players. Mine, build, fight, craft and farm to unravel the mystery of the ancient Core.",
     "features": null,
     "images": [
-        "quay.io\/pterodactyl\/core:source"
+        "ghcr.io\/pterodactyl\/games:source"
     ],
     "file_denylist": [],
     "startup": ".\/CoreKeeperServer -nographics -batchmode -world {{SERVER_WORLD}} -worldname \"{{SERVER_WORLDNAME}}\" -worldseed {{SERVER_WORLDSEED}} -gameid \"{{SERVER_GAMEID}}\" -datapath \"{{SERVER_DATAPATH}}\" -maxplayers {{SERVER_MAXPLAYERS}}",
